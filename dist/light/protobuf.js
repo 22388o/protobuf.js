@@ -1,6 +1,6 @@
 /*!
- * protobuf.js v6.11.0 (c) 2016, daniel wirtz
- * compiled thu, 29 apr 2021 02:20:44 utc
+ * protobuf.js v6.11.3 (c) 2016, daniel wirtz
+ * compiled wed, 02 mar 2022 21:11:59 utc
  * licensed under the bsd-3-clause license
  * see: https://github.com/dcodeio/protobuf.js for details
  */
@@ -1439,7 +1439,8 @@ function decoder(mtype) {
         var field = mtype._fieldsArray[i].resolve(),
             type  = field.resolvedType instanceof Enum ? "int32" : field.type,
             ref   = "m" + util.safeProp(field.name); gen
-            ("case %i:", field.id);
+            ("case %i:", field.id)
+                ("{");
 
         // Map fields
         if (field.map) { gen
@@ -1510,7 +1511,8 @@ function decoder(mtype) {
         else gen
                 ("%s=r.%s()", ref, type);
         gen
-                ("break");
+                ("break")
+                ("}");
     // Unknown fields
     } gen
             ("default:")
@@ -1899,13 +1901,13 @@ function Field(name, id, type, rule, extend, options, comment) {
     if (extend !== undefined && !util.isString(extend))
         throw TypeError("extend must be a string");
 
+    if (rule === "proto3_optional") {
+        rule = "optional";
+    }
     /**
      * Field rule, if any.
      * @type {string|undefined}
      */
-    if (rule === "proto3_optional") {
-        rule = "optional";
-    }
     this.rule = rule && rule !== "optional" ? rule : undefined; // toJSON
 
     /**
@@ -2777,6 +2779,7 @@ var ReflectionObject = require(22);
 ((Namespace.prototype = Object.create(ReflectionObject.prototype)).constructor = Namespace).className = "Namespace";
 
 var Field    = require(15),
+    OneOf    = require(23),
     util     = require(33);
 
 var Type,    // cyclic
@@ -2988,7 +2991,7 @@ Namespace.prototype.getEnum = function getEnum(name) {
  */
 Namespace.prototype.add = function add(object) {
 
-    if (!(object instanceof Field && object.extend !== undefined || object instanceof Type || object instanceof Enum || object instanceof Service || object instanceof Namespace))
+    if (!(object instanceof Field && object.extend !== undefined || object instanceof Type || object instanceof Enum || object instanceof Service || object instanceof Namespace || object instanceof OneOf))
         throw TypeError("object must be a valid nested object");
 
     if (!this.nested)
@@ -3203,7 +3206,7 @@ Namespace._configure = function(Type_, Service_, Enum_) {
     Enum    = Enum_;
 };
 
-},{"15":15,"22":22,"33":33}],22:[function(require,module,exports){
+},{"15":15,"22":22,"23":23,"33":33}],22:[function(require,module,exports){
 "use strict";
 module.exports = ReflectionObject;
 

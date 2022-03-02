@@ -1,5 +1,9 @@
 # Changelog
 
+### [6.11.3](https://www.github.com/protobufjs/protobuf.js/compare/v6.11.2...v6.11.3) (2022-03-02)
+
+* add case scoping in decoder to prevent identifier redeclaration.
+
 ### [6.11.2](https://www.github.com/protobufjs/protobuf.js/compare/v6.11.1...v6.11.2) (2021-04-30)
 
 * regenerated index.d.ts to fix the unintended breaking change in types.
