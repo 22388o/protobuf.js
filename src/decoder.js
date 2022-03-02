@@ -34,6 +34,7 @@ function decoder(mtype) {
             type  = field.resolvedType instanceof Enum ? "int32" : field.type,
             ref   = "m" + util.safeProp(field.name); gen
             ("case %i:", field.id);
+                ("{")
 
         // Map fields
         if (field.map) { gen
@@ -104,6 +105,7 @@ function decoder(mtype) {
         else gen
                 ("%s=r.%s()", ref, type);
         gen
+                ("}")
                 ("break");
     // Unknown fields
     } gen
